@@ -6,6 +6,8 @@ This is the internal system of Swiftkind. It contains the HR, Payroll, Accountin
 
 ..after cloning it. (make sure to set a virtualenv or f\*\*k off)
 
+this runs perfectly on `python3.6` so install that version or higher but not lower, OK?
+
 **ON THE BACKEND.**
 
 1. Setup the configuration `settings.py`. PLEASE create a `local_settings.py` and don't play dumb.
