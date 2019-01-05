@@ -12,9 +12,11 @@ this runs perfectly on `python3.6` so install that version or higher but not low
 
 1. Setup the configuration `settings.py`. PLEASE create a `local_settings.py` and don't play dumb.
 
-2. Run `pip install -r requirements.txt`
+2. Don't forget to set `DEBUG` to true in your `local_settings.py`
 
-3. Run `python manage.py migrate` then `runserver`
+3. Run `pip install -r requirements.txt`
+
+4. Run `python manage.py migrate` then `runserver`
 
 **ON THE FRONTEND.**
 
