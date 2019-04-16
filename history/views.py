@@ -11,10 +11,14 @@ from .serializers import StandupSerializer, ReportSerializer
 
 
 class Standups(Query, ViewSet):
-    """ daily standups endpoint
+    """ daily standups endpoint that receives report
+        from our slack workplace (SLACK API)
+
+        *IMPORTANT: Do not ADD authentication on this
+            view as it will prevent the standups from
+            slack to go through.
     """
     serializer_class = StandupSerializer
-    permission_classes = (IsAuthenticated,)
 
     def post(self, *args, **kwargs):
         # this post method is being
