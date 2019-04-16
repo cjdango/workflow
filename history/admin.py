@@ -129,7 +129,7 @@ class StandupAdmin(JSONParser, admin.ModelAdmin):
     def raw_data(self, instance):
         """Function to display pretty version of our data"""
         rawdata = json.loads(instance.raw)
-        if rawdata.get(text):
+        if rawdata.get('text'):
             rawdata['text'] = self.convert_text_to_json(rawdata['text'])
 
             # Convert the data to sorted, indented JSON
