@@ -12,7 +12,7 @@ from rest_framework.viewsets import ViewSet
 
 from accounting.models import Project
 from history.models import Standup, Blocker
-from history.serializers import ReportSerializer
+from history.serializers import ReportSerializer, BlockerSerializer
 from utils.mixins import Query, TZ
 
 from .serializers import FeedSerializer, EventSerializer, PendingIssueSerializer
@@ -57,12 +57,11 @@ class Notification(Query, TZ, ViewSet):
     def pending(self, *args, **kwargs):
         # filter standups that has blockers that
         # are not yet fixed.
-        standups = self._filter(Standup,
-            user=self.request.user,
-        ).exclude(Q(blocker=None) | Q(blocker__is_fixed=True))
-
-        serializer = PendingIssueSerializer(
-            self.group_by_project(standups),
+        serializer = BlockerSerializer(
+            self._filter(Blocker,
+                standup__user=self.request.user,
+                is_fixed=False
+            ),
             many=True
         )
         return Response(serializer.data, status=200)

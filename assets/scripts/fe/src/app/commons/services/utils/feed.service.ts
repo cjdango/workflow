@@ -97,9 +97,4 @@ export class FeedService {
         this.pendingIssues = resp;
       });
   }
-
-  getIssueCount() {
-    // return the sum of all the number of issues.
-    return _.map(this.pendingIssues, 'count').map(Number).reduce((x,y) => x + y);
-  }
 }

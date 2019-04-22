@@ -1,57 +1,59 @@
 <aside class="post-standup">
-    <i class="far fa-times close-popup" id="closePopup"></i>
-    <div class="post-standup__header" id="postStandupOpen">
-      <span class="wave shake animate infinite">👋</span>
-      <p class="post-standup__title">Standup</p>
-    </div>
-    <div class="post-standup__form--container">
-      <div class="form">
-        <div class="form-group">
-          <textarea rows="1" class="form__input form-control" placeholder="What did you do today?"></textarea>
-          <div class="form__input__actions" >
-            <button class="btn btn-primary">
-              Add item
-            </button>
-            <div class="form__input__hours">
-              <input type="number" name="" placeholder="HH" class="form__input form-control"> 
-              <input type="number" name="" placeholder="MM" class="form__input form-control"> 
-            </div>
+  <i class="far fa-times close-popup" id="closePopup"></i>
+  <div class="post-standup__header" id="postStandupOpen">
+    <span class="wave shake animate infinite">👋</span>
+    <p class="post-standup__title">Standup</p>
+  </div>
+  <div class="post-standup__form--container">
+    <div class="form">
+      <div class="form-group">
+        <textarea rows="1" class="form__input form-control" placeholder="What did you do today?"></textarea>
+        <div class="form__input__actions" >
+          <button class="btn btn-primary">
+            Add item
+          </button>
+          <div class="form__input__hours">
+            <input type="number" name="" placeholder="HH" class="form__input form-control"> 
+            <input type="number" name="" placeholder="MM" class="form__input form-control"> 
           </div>
-        </div>
-        <div class="form-group">
-          <textarea type="text" name="" class="form__input form-control" placeholder="What are your plans for tomorrow?" rows="1"></textarea>
-          <div class="form__input__actions" >
-            <button class="btn btn-primary">
-              Add item
-            </button>
-            <div class="form__input__hours">
-              <input type="number" name="" placeholder="HH" class="form__input form-control"> 
-              <input type="number" name="" placeholder="MM" class="form__input form-control"> 
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <textarea type="text" name="" class="form__input form-control" placeholder="Do you have issues/blockers?" rows="1"></textarea>
-          <div class="form__input__actions" >
-            <button class="btn btn-primary">
-              Add item
-            </button>
-            <div class="form__input__hours">
-              <input type="number" name="" placeholder="HH" class="form__input form-control"> 
-              <input type="number" name="" placeholder="MM" class="form__input form-control"> 
-            </div>
-          </div>
-        </div>
-        <div class="text-right">
-          <button class="btn-primary btn paragraph px-5 ">Submit</button>
         </div>
       </div>
+      <div class="form-group">
+        <textarea type="text" name="" class="form__input form-control" placeholder="What are your plans for tomorrow?" rows="1"></textarea>
+        <div class="form__input__actions" >
+          <button class="btn btn-primary">
+            Add item
+          </button>
+          <div class="form__input__hours">
+            <input type="number" name="" placeholder="HH" class="form__input form-control"> 
+            <input type="number" name="" placeholder="MM" class="form__input form-control"> 
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <textarea type="text" name="" class="form__input form-control" placeholder="Do you have issues/blockers?" rows="1"></textarea>
+        <div class="form__input__actions" >
+          <button class="btn btn-primary">
+            Add item
+          </button>
+          <div class="form__input__hours">
+            <input type="number" name="" placeholder="HH" class="form__input form-control"> 
+            <input type="number" name="" placeholder="MM" class="form__input form-control"> 
+          </div>
+        </div>
+      </div>
+      <div class="text-right">
+        <button class="btn-primary btn paragraph px-5 ">Submit</button>
+      </div>
     </div>
-    <!-- <div class="post-standup__confirmation">
-      <span class="tada">🎉</span>
-      <p class="confirmation-message">Thank you! Your Standup report has been posted.</p>
-    </div> -->
-  </aside>
+  </div>
+  <!-- <div class="post-standup__confirmation">
+    <span class="tada">🎉</span>
+    <p class="confirmation-message">Thank you! Your Standup report has been posted.</p>
+  </div> -->
+</aside>
+
+
 <div class="center-section feed-container">
   <section class="feed-section" *ngIf="feed.q" (scroll)="scrollfeed($event)">
     <!-- FEED CARDS -->
@@ -62,37 +64,33 @@
             <div class="report-info">
               <div class="d-flex align-items-center justify-content-between mb-3">
                 <div class="d-flex align-items-center">
-                  <a href="" class="project-name">{{ item.instance.project.channel_name }}</a>
+                  <a uiSref="dashboard-report" [uiParams]="{id: item.instance.id}" class="project-name">{{ item.instance.project.channel_name }}</a>
                   <span class="badge badge__report">Report</span>
                   <span class="timestamp">{{ item.instance.date_created | date: "MMM d, h:mm a" }}</span>
                 </div>
                  <div class="feed-summary">
-                   <p class="hours badge">
-                     <span>8H</span>
-                     <span>&nbsp;</span>
-                     <span>34M</span>
-                   </p>
+                   <p class="hours badge" [innerHtml]="item.instance.total_hours | timeformat"></p>
                     <!-- <p>{{ item.instance.total_hours }} hours</p> -->
                   </div>
               </div>
                <div class="report-content">
                 <small class="report-type">Done</small>
                  <div class="d-flex">
-                   <p class="report-hint">{{ item.instance.done[0].content }}</p>
+                   <p class="report-hint">{{ item.instance.done | getornull: "0" }}</p>
                    <span *ngIf="item.instance.done.length > 0" class="content-count">+{{ item.instance.done.length }}</span>
                  </div>
                </div>
                <div class="report-content">
                 <small class="report-type">Todo</small>
                  <div class="d-flex">
-                   <p class="report-hint">{{ item.instance.todo[0].content }}</p>
+                   <p class="report-hint">{{ item.instance.todo | getornull: "0" }}</p>
                    <span *ngIf="item.instance.done.length > 0" class="content-count">+{{ item.instance.todo.length }}</span>
                  </div>
                </div>
 
               
               <span *ngIf="item.instance.blockers.length === 0" class="no-issue">No Issues</span>
-              <span *ngIf="item.instance.blockers.length > 0" class="with-issues">{{ item.instance.pending_issues }} pending issue{{ item.instance.pending_issues > 1 ? 's': '' }}</span>
+              <span *ngIf="item.instance.blockers.length > 0" class="with-issues">{{ item.instance.pending_issues }} pending issue{{ item.instance.blockers | pluralize }}</span>
             </div>
           </div>
         <div *ngIf="item.instance.blockers.length > 0" class="details pt-2">
@@ -122,7 +120,10 @@
             <label class="mb-0">
               <small class="text-muted">Mentions:</small>
             </label>
-            <p class="text-strong">Everyone</p>
+            <div class="event-participants d-flex">
+              <div class="avatar-xs mr-1" *ngFor="let member of item.instance.participants" [ngStyle]="{'background-image': 'url(' + member.image + ')'}" title="{{ member.full_name }}"></div>
+              <div class="avatar-xs more" *ngIf="(item.instance.participants.length - 3) > 0"><span>+</span>{{ item.instance.participants.length - 3 }}</div>
+            </div>
           </div>
           <div class="mr-4">
             <label class="mb-0">
@@ -132,9 +133,9 @@
           </div>
           <div class="mr-4">
             <label class="mb-0">
-              <small class="text-muted">Posted by:</small>
+              <small class="text-muted">Mentions:</small>
             </label>
-            <div class="avatar-xs" [ngStyle]="{'background-image': 'url(' + item.instance.organizer.image + ')'}" data-rjs="3"></div>
+            <div class="avatar-xs" [ngStyle]="{'background-image': 'url(' + item.instance.organizer.image + ')'}" title="{{ item.instance.organizer.full_name }}"></div>
           </div>
         </div>
       </div>
@@ -188,37 +189,19 @@
             <div class="stat-section-title">
               <a href="">
                 <i class="far fa-times-hexagon"></i>
-                <span>You have {{ feed.getIssueCount() }} pending issues</span>
+                <span>You have {{ feed.pendingIssues.length }} pending issue{{ feed.pendingIssues | pluralize }}</span>
               </a>
-              <small class="text-muted">3 days ago</small>
             </div>
 
             <div class="stat-section-details">
-              <div class="issue-item">
+              
+              <div class="issue-item" *ngFor="let issue of feed.pendingIssues">
                 <div  class="my-2 d-flex justify-content-between">
-                  <p class="project-name">#cl-Helpdesk</p>
-                  <small class="text-muted">8 mins ago</small>
+                  <p class="project-name">#{{ issue.standup.project.channel_name }}</p>
+                  <small class="text-muted">{{ issue.standup.date_created | timeAgo }}</small>
                 </div>
                 <a href="">
                   1. Finding out why the updated server always running and consuming server resources and spaces budget and details
-                </a>
-              </div>
-              <div class="issue-item">
-                <div  class="my-2 d-flex justify-content-between">
-                 <p class="project-name">#cl-Helpdesk</p>
-                  <small class="text-muted">3 days ago</small>
-                </div>
-                <a href="">
-                  2. Aws documentation didn’t specify that I had to include the issuerand the username to produce the QR code.
-                </a>
-              </div>
-              <div class="issue-item">
-                <div  class="my-2 d-flex justify-content-between">
-                  <p class="project-name">#cl-Helpdesk</p>
-                  <small class="text-muted">3 days ago</small>
-                </div>
-                <a href="">
-                  3. Slow internet connection, I can’t access the staging so I can’t test if the cloud trail is working properly.
                 </a>
               </div>
 

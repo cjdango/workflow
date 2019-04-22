@@ -29,6 +29,8 @@ class EventSerializer(serializers.ModelSerializer):
     start_time = serializers.SerializerMethodField()
     end_time = serializers.SerializerMethodField()
     organizer = ShortUserSerializer(read_only=True)
+    participants = ShortUserSerializer(read_only=True, many=True)
+
 
     class Meta:
         model = Event
