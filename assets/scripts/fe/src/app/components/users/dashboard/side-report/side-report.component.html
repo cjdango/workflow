@@ -15,10 +15,10 @@
         <div class="mr-5">
           <h6 class="mb-0 pane-title">#{{ report.project.channel_name }}</h6>
           <label *ngIf="report.blockers.length === 0"><small>No Issues</small></label>
-          <label *ngIf="report.blockers.length > 0" class="text-danger"><small>{{ report.pending_issues }} Pending Issue{{ report.pending_issues > 1 ? 's': '' }}</small></label>
+          <label *ngIf="report.blockers.length > 0" class="text-danger"><small>{{ report.pending_issues }} Pending Issue{{ report.pending_issues | pluralize }}</small></label>
         </div>
         <div class="text-left">
-          <h6 class="mb-0 d-block pane-title">Hours:  <span>{{ report.total_hours }}</span></h6>
+          <h6 class="mb-0 d-block pane-title">Hours:  <span [innerHtml]="report.total_hours | timeformat"></span></h6>
           <label class=" text-muted"><small>as of {{ report.date_created | date: "h:mm a" }}</small></label>
         </div>
       </div>
@@ -41,7 +41,7 @@
               </p>
             </td>
             <td>
-              <a [href]="i.reference | sanitizeurl">
+              <a [href]="i.reference | sanitizeurl" [target]="_blank">
                 <i class="fal fa-external-link"></i>
               </a>
             </td>
@@ -69,7 +69,7 @@
               </p>
             </td>
             <td>
-              <a [href]="i.reference | sanitizeurl">
+              <a [href]="i.reference | sanitizeurl" [target]="_blank">
                 <i class="fal fa-external-link"></i>
               </a>
             </td>
@@ -95,12 +95,12 @@
               </p>
             </td>
             <td>
-              <a [href]="i.reference | sanitizeurl">
+              <a [href]="i.reference | sanitizeurl" [target]="_blank">
                 <i class="fal fa-external-link"></i>
               </a>
             </td>
             <td>
-              <span class="issue-status-mark" [ngClass]="{'unresolved': !report.is_fixed, 'resolved': report.is_fixed}"></span>
+              <span class="issue-status-mark" [ngClass]="{'unresolved': !i.is_fixed, 'resolved': i.is_fixed}"></span>
             </td>
           </tr>
         </tbody>
