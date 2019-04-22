@@ -29,8 +29,11 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     // reload the feed item list except on
-    // dashboard-report.
+    // dashboard-report or if the feed list
+    // is empty.
     if (!this.feed.noreload && this.state.$current.name !== 'dashboard-report') {
+      this.feed.getFeed();
+    } else if (this.state.$current.name === 'dashboard-report' && this.feed.q.length < 1) {
       this.feed.getFeed();
     } else {
       this.feed.noreload = false;
