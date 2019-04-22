@@ -19,6 +19,18 @@
 	}
 
 }
+
+.more {
+    color: $primary;
+    font-family: $Text-Medium;
+    @include justify-align-center();
+    font-size: small;
+    span {
+        line-height: 0.5;
+        display: block;
+    }
+}
+
 .no-photo{
 	
 

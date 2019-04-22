@@ -113,6 +113,7 @@ class StandupSerializer(DailyStandup, serializers.Serializer):
 
 class ShortStandupSerializer(serializers.ModelSerializer):
     user = ShortUserSerializer()
+    project = ProjectSerializer()
 
     class Meta:
         model = Standup
@@ -120,6 +121,7 @@ class ShortStandupSerializer(serializers.ModelSerializer):
             'id',
             'date_created',
             'date_updated',
+            'project',
             'user',
         )
 
@@ -199,7 +201,7 @@ class ReportSerializer(serializers.ModelSerializer):
         )
 
     def get_total_hours(self, obj):
-        return f"{obj.total_hours:.1f}"
+        return f"{obj.total_hours:.2f}"
 
     def get_done(self, obj):
         return DoneSerializer(
