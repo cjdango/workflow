@@ -35,9 +35,6 @@ export class TokenService {
     return n.handle(req).pipe(tap(
       resp => {
         if (resp instanceof HttpResponse) return resp;
-      },
-      err => {
-        if (err instanceof HttpErrorResponse) this.authenticate();
       }
     ));
   }
@@ -48,12 +45,4 @@ export class TokenService {
     const t = _.get(this.auth.getToken(), ['token'], null);
     return `Token ${t}`;
   }
-
-  // Remove expired token. redirect the user to the login
-  // page and re-authenticate.
-  authenticate () {
-    this.auth.rmToken();
-    this.state.go('login');
-  }
-
 }
