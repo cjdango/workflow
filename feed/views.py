@@ -49,7 +49,7 @@ class Notification(Query, TZ, ViewSet):
     """
     def events(self, *args, **kwargs):
         serializer = EventSerializer(
-            self._filter(Event, event_date=timezone.now().date()),
+            Event.objects.triggered_today(),
             many=True
         )
         return Response(serializer.data, status=200)
