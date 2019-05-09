@@ -6,7 +6,8 @@ urlpatterns = [
     path('', Feed.as_view(), name="feed"),
 
     path('notifications/events/', Notification.as_view({
-        'get': 'events'
+        'get': 'events',
+        'post': 'create'
     }), name="notification_events"),
 
     path('notifications/pending/', Notification.as_view({

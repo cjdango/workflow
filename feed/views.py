@@ -65,6 +65,12 @@ class Notification(Query, TZ, ViewSet):
             many=True
         )
         return Response(serializer.data, status=200)
+    
+    def create(self, *args, **kwargs):
+        serializer = EventSerializer(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(organizer=self.request.user)
+        return Response(serializer.data, status=200)
 
     def group_by_project(self, query):
         """ method that will reconstruct the queryset
