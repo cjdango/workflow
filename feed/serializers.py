@@ -45,6 +45,11 @@ class EventSerializer(serializers.ModelSerializer):
             'end_time',
             'date_created',
         )
+    
+    def create(self, validated_data):
+        event = Event.objects.create(**validated_data)
+        event.participants.add(event.organizer)
+        return event
 
     def get_start_time(self, obj):
         return f"{obj.event_date}T{obj.start_time}"
