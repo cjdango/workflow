@@ -54,12 +54,18 @@ class EventSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         event = super(EventSerializer, self).create(validated_data)
+        
+        # Add event organizer as always participant.
         event.participants.add(event.organizer)
+
         return event
 
     def update(self, instance, validated_data):
-        event = super(EventSerializer, self).update(validated_data)
+        event = super(EventSerializer, self).update(instance, validated_data)
+
+        # Add event organizer as always participant.
         event.participants.add(event.organizer)
+
         return event
 
     def get_start_time(self, obj):
