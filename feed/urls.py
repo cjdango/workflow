@@ -7,8 +7,12 @@ urlpatterns = [
 
     path('notifications/events/', Notification.as_view({
         'get': 'events',
-        'post': 'create'
+        'post': 'create',
     }), name="notification_events"),
+
+    path('notifications/events/<int:pk>/', Notification.as_view({
+        'put': 'update',
+    }), name="notification_event_details"),
 
     path('notifications/pending/', Notification.as_view({
         'get': 'pending'
