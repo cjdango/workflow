@@ -72,29 +72,19 @@ class Notification(Query, TZ, ViewSet):
 
         serializer = EventSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        # Set `request.user` as organizer and first 
-        # participant with other users if specified
-        # participants = [user, *request.data.get('participants', [])]
         serializer.save(organizer=user)
 
         return Response(serializer.data, status=200)
     
     def update(self, request, *args, **kwargs):
-        user = request.user
-        event = get_object_or_404(Event, pk=kwargs.get('pk'))        
+        event = get_object_or_404(Event, pk=kwargs.get('pk'))
+
         serializer = EventSerializer(
             event,
             data=request.data,
             partial=True
         )
         serializer.is_valid(raise_exception=True)
-
-        # Set specic users as participants with the default user 
-        # as always the first participant or retain the current 
-        # participants if `participants` is not in `request.data`
-        # participants = request.data.get('participants', event.participants.all())
-        # participants = [user, *participants]
         serializer.save()
 
         return Response(serializer.data, status=200)
