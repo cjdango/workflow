@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from utils.mixins import Query
 from users.serializers import ShortUserSerializer
+from users.models import User
 from accounting.serializers import ProjectSerializer
 from history.serializers import BlockerSerializer
 
@@ -30,6 +31,10 @@ class EventSerializer(serializers.ModelSerializer):
     end_time = serializers.SerializerMethodField()
     organizer = ShortUserSerializer(read_only=True)
     participants = ShortUserSerializer(read_only=True, many=True)
+    participants_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), source='participants',
+        write_only=True, many=True, required=False
+    )
 
 
     class Meta:
@@ -40,14 +45,20 @@ class EventSerializer(serializers.ModelSerializer):
             'content',
             'organizer',
             'participants',
+            'participants_id',
             'event_date',
             'start_time',
             'end_time',
             'date_created',
         )
-    
+
     def create(self, validated_data):
-        event = Event.objects.create(**validated_data)
+        event = super(EventSerializer, self).create(validated_data)
+        event.participants.add(event.organizer)
+        return event
+
+    def update(self, instance, validated_data):
+        event = super(EventSerializer, self).update(validated_data)
         event.participants.add(event.organizer)
         return event
 
