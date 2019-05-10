@@ -21,7 +21,8 @@
         [ngbPopover]="eventForm"
         container="body"
         autoClose="outside"
-        popoverTitle="Event">
+        popoverTitle="Event"
+        (click)="toggleEventForm(datePopover, date)">
         {{date.getDate()}}
       </span>
     </div>
