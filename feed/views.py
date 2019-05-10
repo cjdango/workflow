@@ -90,7 +90,7 @@ class Notification(Query, TZ, ViewSet):
         return Response(serializer.data, status=200)
 
     def remove(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, pk=kwargs.get('pk'))
+        event = get_object_or_404(Event, pk=kwargs.get('pk'), organizer=request.user)
         serializer = EventSerializer(event)
         data = serializer.data
         event.delete()
