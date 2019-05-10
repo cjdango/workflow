@@ -12,6 +12,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SettingComponent } from './setting/setting.component';
 import { SideReportComponent } from './dashboard/side-report/side-report.component';
 import { CalendarComponent } from './dashboard/calendar/calendar.component';
+import { EventFormComponent } from './dashboard/calendar/event-form/event-form.component';
 
 
 @NgModule({
@@ -23,6 +24,6 @@ import { CalendarComponent } from './dashboard/calendar/calendar.component';
     DirectivesModule,
     PipesModule
   ],
-  declarations: [DashboardComponent, SettingComponent, SideReportComponent, CalendarComponent]
+  declarations: [DashboardComponent, SettingComponent, SideReportComponent, CalendarComponent, EventFormComponent]
 })
 export class UsersModule { }
