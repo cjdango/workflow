@@ -14,7 +14,7 @@ export class Event {
   event_date    : Date = null;
   start_time    : Date = null;
   end_time      : Date = null;
-  frequency     : string = null;
+  frequency?    : string = null;
 
 
   constructor(data = {}) {
