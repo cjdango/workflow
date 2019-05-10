@@ -1,3 +1,7 @@
+<ng-template #eventForm let-eventDate="date">
+  <app-event-form [eventDate]="eventDate"></app-event-form>
+</ng-template>
+
 <div class="monthly-calendar">
   <h6 class="mb-2">Calendar</h6>
   <div class="calendar-header">
@@ -13,15 +17,26 @@
     <div class="weekview" id="firstWeek">
       <span 
         *ngFor="let date of firstWeek" 
-        [ngClass]="getDateClass(date)">
+        [ngClass]="getDateClass(date)"
+        [ngbPopover]="eventForm"
+        container="body"
+        autoClose="outside"
+        popoverTitle="Event">
         {{date.getDate()}}
       </span>
     </div>
     <div class="wholeMonth" id="wholeMonth" aria-lablledby="firstWeek" data-parent="#datesAccordion" [ngbCollapse]="isCollapsed">
       <div class="weekview" *ngFor="let week of weeks.slice(1)">
         <span 
+          #datePopover="ngbPopover"
           *ngFor="let date of week" 
-          [ngClass]="getDateClass(date)">
+          [ngClass]="getDateClass(date)"
+          [ngbPopover]="eventForm"
+          container="body"
+          autoClose="outside"
+          triggers="manual"
+          popoverTitle="Event"
+          (click)="toggleEventForm(datePopover, date)">
           {{date.getDate()}}
         </span>
       </div>
