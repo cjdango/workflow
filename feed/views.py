@@ -89,6 +89,13 @@ class Notification(Query, TZ, ViewSet):
 
         return Response(serializer.data, status=200)
 
+    def remove(self, request, *args, **kwargs):
+        event = get_object_or_404(Event, pk=kwargs.get('pk'))
+        serializer = EventSerializer(event)
+        data = serializer.data
+        event.delete()
+        return Response(data, status=200)
+
     def group_by_project(self, query):
         """ method that will reconstruct the queryset
             and group it by project.

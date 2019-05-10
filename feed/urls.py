@@ -12,6 +12,7 @@ urlpatterns = [
 
     path('notifications/events/<int:pk>/', Notification.as_view({
         'put': 'update',
+        'delete': 'remove',
     }), name="notification_event_details"),
 
     path('notifications/pending/', Notification.as_view({
