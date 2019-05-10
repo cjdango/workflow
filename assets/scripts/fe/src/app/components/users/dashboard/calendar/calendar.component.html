@@ -22,6 +22,7 @@
         [ngbPopover]="eventForm"
         container="body"
         autoClose="outside"
+        triggers="manual"
         popoverTitle="Event"
         (click)="toggleEventForm(datePopover1, date)">
         {{date.getDate()}}
