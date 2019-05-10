@@ -99,4 +99,9 @@ export class FeedService {
         this.pendingIssues = resp;
       });
   }
+
+  addEvent(value) {
+    return this.http.post(FEED_NOTIFICATIONS_EVENTS, value)
+      .toPromise();
+  }
 }

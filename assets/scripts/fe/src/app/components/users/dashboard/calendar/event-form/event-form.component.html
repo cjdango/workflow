@@ -19,12 +19,7 @@
       <div class="form-group">
         <label>Participants:</label>
           <select formControlName="participants_id" class="form-control" multiple>
-            <option value="dog">Dog</option>
-            <option value="cat">Cat</option>
-            <option value="hamster">Hamster</option>
-            <option value="parrot">Parrot</option>
-            <option value="spider">Spider</option>
-            <option value="goldfish">Goldfish</option>
+            <option *ngFor="let user of users" [ngValue]="user.id">{{user.full_name}}</option>
           </select>
         <span [hidden]="form.valid('participants_id')">
           This field is required.
@@ -45,6 +40,13 @@
         <span [hidden]="form.valid('end_time')">This field is required.</span>
       </div>
     </div>
+    <div class="col-md-12">
+        <div class="form-group">
+          <label>Frequency:</label>
+          <input type="text" formControlName="frequency" class="form-control" />
+          <span [hidden]="form.valid('frequency')">This field is required.</span>
+        </div>
+      </div>
   </div>
 
   <button type="submit" class="btn btn-primary px-4">Add Event</button>
