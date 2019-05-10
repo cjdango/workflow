@@ -11,9 +11,9 @@ export class Event {
   title         : string = null;
   content       : string = null;
   participants  : Array<object> = null;
-  event_date    : Date = null;
-  start_time    : Date = null;
-  end_time      : Date = null;
+  event_date    : string = null;
+  start_time    : string = null;
+  end_time      : string = null;
   frequency?    : string = null;
 
 
