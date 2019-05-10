@@ -1,8 +1,12 @@
 from django.urls import path, re_path
-from .views import (Login, User, SlackAuth, ChangePassword)
+from .views import (Login, Users, User, SlackAuth, ChangePassword)
 
 
 urlpatterns = [
+    path('', Users.as_view({
+        'get': 'get',
+    }), name="users"),
+
     path('auth/', User.as_view({
         'get': 'get',
         'post': 'update',

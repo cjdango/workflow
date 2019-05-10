@@ -17,7 +17,9 @@ from .serializers import (
     PasswordSerializer,
 )
 
-from .models import User
+# Had to set an alias because of conflict with 
+# existing ViewSet named User
+from .models import User as UserModel
 
 
 class Login(APIView):
@@ -99,6 +101,16 @@ class SlackAuth(Query, Slack, ViewSet):
             'user_id': access_token.user.id
         }, status=200)
 
+class Users(ViewSet):
+    """ users endpoint
+    """
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, *args, **kwargs):
+        users = UserModel.objects.all()
+        serializer = self.serializer_class(users, many=True)
+        return Response(serializer.data, status=200)
 
 class User(TZ, ViewSet):
     """ user endpoint
