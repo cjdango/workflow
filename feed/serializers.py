@@ -26,9 +26,6 @@ class FeedSerializer(FeedParser, serializers.Serializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-
-    start_time = serializers.SerializerMethodField()
-    end_time = serializers.SerializerMethodField()
     organizer = ShortUserSerializer(read_only=True)
     participants = ShortUserSerializer(read_only=True, many=True)
     participants_id = serializers.PrimaryKeyRelatedField(
@@ -46,6 +43,7 @@ class EventSerializer(serializers.ModelSerializer):
             'organizer',
             'participants',
             'participants_id',
+            'frequency',
             'event_date',
             'start_time',
             'end_time',
@@ -67,12 +65,18 @@ class EventSerializer(serializers.ModelSerializer):
         event.participants.add(event.organizer)
 
         return event
+    
+    def to_representation(self, instance):
+        ret = super(EventSerializer, self).to_representation(instance)
 
-    def get_start_time(self, obj):
-        return f"{obj.event_date}T{obj.start_time}"
-
-    def get_end_time(self, obj):
-        return f"{obj.event_date}T{obj.end_time}"
+        # We need to allow read-write for start_time and end_time.
+        # `SerializerMethodField` is not an option so we format these
+        # fields here.
+        ret.update({
+            'start_time': f"{instance.event_date}T{instance.start_time}",
+            'end_time': f"{instance.event_date}T{instance.end_time}",
+        })
+        return ret
 
 
 class PendingIssueSerializer(Query, serializers.Serializer):
