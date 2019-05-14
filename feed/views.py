@@ -66,35 +66,7 @@ class Notification(Query, TZ, ViewSet):
             many=True
         )
         return Response(serializer.data, status=200)
-    
-    def create(self, request, *args, **kwargs):
-        user = request.user
 
-        serializer = EventSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(organizer=user)
-
-        return Response(serializer.data, status=200)
-    
-    def update(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, pk=kwargs.get('pk'))
-
-        serializer = EventSerializer(
-            event,
-            data=request.data,
-            partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data, status=200)
-
-    def remove(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, pk=kwargs.get('pk'), organizer=request.user)
-        serializer = EventSerializer(event)
-        data = serializer.data
-        event.delete()
-        return Response(data, status=200)
 
     def group_by_project(self, query):
         """ method that will reconstruct the queryset
@@ -134,4 +106,39 @@ class Notification(Query, TZ, ViewSet):
 class Calendar(Query, TZ, ViewSet):
     """ calendar endpoint
     """
-    pass
+    def events(self, *args, **kwargs):
+        year = self.request.query_params.get('year', timezone.now().year)
+        serializer = EventSerializer(
+            Event.objects.on_year(year),
+            many=True
+        )
+        return Response(serializer.data, status=200)
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+
+        serializer = EventSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(organizer=user)
+
+        return Response(serializer.data, status=200)
+    
+    def update(self, request, *args, **kwargs):
+        event = get_object_or_404(Event, pk=kwargs.get('pk'))
+
+        serializer = EventSerializer(
+            event,
+            data=request.data,
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=200)
+
+    def remove(self, request, *args, **kwargs):
+        event = get_object_or_404(Event, pk=kwargs.get('pk'), organizer=request.user)
+        serializer = EventSerializer(event)
+        data = serializer.data
+        event.delete()
+        return Response(data, status=200)
