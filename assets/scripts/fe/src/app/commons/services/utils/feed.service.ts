@@ -16,7 +16,6 @@ import { ServerService } from '../auth/server.service';
 export class FeedService {
   public q = [];
   public nEvents: any;
-  public calendarEvents: any;
   public pendingIssues: any;
 
   public scrollHeight:number;
@@ -112,10 +111,7 @@ export class FeedService {
       FEED_CALENDAR_EVENTS,
       { params: { year } }
     )
-      .toPromise()
-      .then(resp => {
-        this.calendarEvents = resp;
-      });
+      .toPromise();
   }
 
   addEvent(value) {
