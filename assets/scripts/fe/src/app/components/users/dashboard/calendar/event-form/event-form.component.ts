@@ -36,10 +36,6 @@ export class EventFormComponent implements OnInit {
     // send the form data to the backend if the value
     // format are valid.
     if (valid) {
-      const { start_time, end_time } = value;
-      value.start_time += ':00';
-      value.end_time   += ':00';
-      // console.log(moment(end_time).format('HH:mm:ss'));
       this.feed.addEvent(value).then((data) => {
         console.log(data);
       });
