@@ -18,14 +18,15 @@
       <span 
         #datePopover1="ngbPopover"
         *ngFor="let date of firstWeek" 
-        [ngClass]="getDateClass(date)"
-        [ngbPopover]="eventForm"
+        [ngClass]="getDateClass(date.date)"
+        [ngbPopover]="!date.events.length ? eventForm : null"
         container="body"
         autoClose="outside"
         triggers="manual"
         popoverTitle="Event"
-        (click)="toggleEventForm(datePopover1, date)">
-        {{date.getDate()}}
+        (click)="toggleEventForm(datePopover1, date.date)">
+        {{date.date.getDate()}}
+        {{date.events.length ? 'e': null}}
       </span>
     </div>
     <div class="wholeMonth" id="wholeMonth" aria-lablledby="firstWeek" data-parent="#datesAccordion" [ngbCollapse]="isCollapsed">
@@ -33,14 +34,15 @@
         <span 
           #datePopover2="ngbPopover"
           *ngFor="let date of week" 
-          [ngClass]="getDateClass(date)"
-          [ngbPopover]="eventForm"
+          [ngClass]="getDateClass(date.date)"
+          [ngbPopover]="!date.events.length ? eventForm : null"
           container="body"
           autoClose="outside"
           triggers="manual"
           popoverTitle="Event"
-          (click)="toggleEventForm(datePopover2, date)">
-          {{date.getDate()}}
+          (click)="toggleEventForm(datePopover2, date.date)">
+          {{date.date.getDate()}}
+          {{date.events.length ? 'e': null}}
         </span>
       </div>
     </div>
