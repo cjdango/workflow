@@ -6,7 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { queryparams } from '../../utils/http.utils';
 
 import { Feed } from '../../models/feed.models';
-import { FEED, FEED_NOTIFICATIONS_EVENTS, FEED_NOTIFICATIONS_PENDING } from '../../constants/api.constants';
+import { FEED, FEED_NOTIFICATIONS_EVENTS, FEED_NOTIFICATIONS_PENDING, FEED_CALENDAR_EVENTS } from '../../constants/api.constants';
+import { ServerService } from '../auth/server.service';
 
 
 @Injectable({
@@ -15,6 +16,7 @@ import { FEED, FEED_NOTIFICATIONS_EVENTS, FEED_NOTIFICATIONS_PENDING } from '../
 export class FeedService {
   public q = [];
   public nEvents: any;
+  public calendarEvents: any;
   public pendingIssues: any;
 
   public scrollHeight:number;
@@ -42,8 +44,13 @@ export class FeedService {
   };
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private server: ServerService
   ) { }
+
+  get yearNow() {
+    return String(this.server.now.getFullYear());
+  }
 
   getFeed() {
     // toggle fetching to true to prevent multiple
@@ -100,8 +107,19 @@ export class FeedService {
       });
   }
 
+  getCalendarEvents(year = this.yearNow) {
+    return this.http.get(
+      FEED_CALENDAR_EVENTS,
+      { params: { year } }
+    )
+      .toPromise()
+      .then(resp => {
+        this.calendarEvents = resp;
+      });
+  }
+
   addEvent(value) {
-    return this.http.post(FEED_NOTIFICATIONS_EVENTS, value)
+    return this.http.post(FEED_CALENDAR_EVENTS, value)
       .toPromise();
   }
 }

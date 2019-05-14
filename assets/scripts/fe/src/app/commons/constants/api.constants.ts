@@ -41,6 +41,9 @@ export const FEED_NOTIFICATIONS = urlsafe(FEED, 'notifications');
 export const FEED_NOTIFICATIONS_EVENTS = urlsafe(FEED_NOTIFICATIONS, 'events');
 export const FEED_NOTIFICATIONS_PENDING = urlsafe(FEED_NOTIFICATIONS, 'pending');
 
+export const FEED_CALENDAR = urlsafe(FEED, 'calendar');
+export const FEED_CALENDAR_EVENTS = urlsafe(FEED_CALENDAR, 'events');
+
 /* HISTORY ENDPOINTS
  */
 

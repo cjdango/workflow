@@ -43,6 +43,8 @@ export class DashboardComponent implements OnInit {
     this.feed.getNotificationEvents();
     // load the notification pending issues data.
     this.feed.getNotificationPendingIssues();
+    // load the calendar events data.
+    this.feed.getCalendarEvents();
   }
 
   @HostListener('scroll', ['$event']) 
