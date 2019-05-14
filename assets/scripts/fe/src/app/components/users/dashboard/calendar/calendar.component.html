@@ -1,5 +1,5 @@
-<ng-template #eventForm let-eventDate="date">
-  <app-event-form [eventDate]="eventDate"></app-event-form>
+<ng-template #eventForm let-eventDate="date" let-popover="popover">
+  <app-event-form [eventDate]="eventDate" (submitSuccess)="popover.close()"></app-event-form>
 </ng-template>
 
 <div class="monthly-calendar">

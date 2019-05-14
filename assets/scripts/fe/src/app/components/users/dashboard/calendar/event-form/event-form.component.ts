@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import * as moment from 'moment';
 
@@ -15,6 +15,7 @@ import { UsersService } from 'src/app/commons/services/users/users.service';
 })
 export class EventFormComponent implements OnInit {
   @Input() eventDate : Date;
+  @Output() submitSuccess   : EventEmitter<any> = new EventEmitter();
 
   users        : Array<User>;
   private form : EventForm;
@@ -33,11 +34,14 @@ export class EventFormComponent implements OnInit {
   }
 
   onSubmit({ value, valid }: { value: Event, valid: boolean }) {
+    // initiate submission of form.
+    this.form.submitted = true;
     // send the form data to the backend if the value
     // format are valid.
     if (valid) {
       this.feed.addEvent(value).then((data) => {
         console.log(data);
+        this.submitSuccess.emit(data);
       });
     }
   }

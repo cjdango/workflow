@@ -141,7 +141,7 @@ export class CalendarComponent implements OnInit {
     if (popover.isOpen()) {
       popover.close();
     } else {
-      popover.open({ date });
+      popover.open({ date, popover });
     }
   }
 
