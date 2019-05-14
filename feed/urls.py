@@ -7,15 +7,19 @@ urlpatterns = [
 
     path('notifications/events/', Notification.as_view({
         'get': 'events',
-        'post': 'create',
     }), name="notification_events"),
-
-    path('notifications/events/<int:pk>/', Notification.as_view({
-        'put': 'update',
-        'delete': 'remove',
-    }), name="notification_event_details"),
 
     path('notifications/pending/', Notification.as_view({
         'get': 'pending'
     }), name="notification_events"),
+
+    path('calendar/events/', Calendar.as_view({
+        'get': 'events',
+        'post': 'create',
+    }), name="calendar_events"),
+
+    path('calendar/events/<int:pk>/', Calendar.as_view({
+        'put': 'update',
+        'delete': 'remove',
+    }), name="calendar_event_details"),
 ]

@@ -6,6 +6,13 @@ from users.models import User
 
 class EventManager(models.Manager):
     """Custom event manager"""
+    def on_year(self, year=timezone.now().year):
+        """ Return events for the given `year`
+        """
+        year_events = super().get_queryset().filter(
+            event_date__year=year,
+        )
+        return year_events
 
     def triggered_today(self):
         """Returns all events that are or will be triggered today.
