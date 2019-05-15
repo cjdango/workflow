@@ -173,24 +173,41 @@ export class CalendarComponent implements OnInit {
     };
   }
 
-  toggleEventForm(popover, date: Date): void {
+  toggleEventForm(popover, calendarDate): void {
     if (popover.isOpen()) {
       popover.close();
     } else {
-      popover.open({ date, popover });
+      popover.open({ calendarDate, popover });
     }
   }
 
-  openModalForm(eventDate: Date) {
+  openModalForm({ eventInstance, eventDate }) {
     const modalRef = this.modal.open(EventFormComponent);
-
-    // pass `eventDate` into `EventFormComponent`
+    // pass `eventDate` and `eventInstance` into `EventFormComponent`
     modalRef.componentInstance.eventDate = eventDate;
+    modalRef.componentInstance.eventInstance  = eventInstance;
 
     // Push the added event into `_calendarEvents`
     modalRef.result
-      .then(event => {
-        this._calendarEvents.push(event);
+      .then(({event, action}) => {
+        // update `this._calendarEvents` base on action
+        switch (action) {
+          case 'create':
+            this._calendarEvents.push(event);
+            break;
+          case 'update':
+            const eventIdx = this._calendarEvents.findIndex(e => e.id === event.id);
+            this._calendarEvents[eventIdx] = event;
+            break;
+          case 'delete':
+            this._calendarEvents = this._calendarEvents.filter(e => e.id !== event.id);
+            break;
+        }
+
+        // Update `firstWeek` and `weeks` so we would not need
+        // to refresh the browser
+        this.firstWeek = this._firstWeek();
+        this.weeks     = this._weeks();
       })
       // Have to catch dismiss reason to avoid uncaught promise.
       .catch(reason => {
