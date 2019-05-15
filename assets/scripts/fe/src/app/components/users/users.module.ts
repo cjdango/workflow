@@ -24,6 +24,7 @@ import { EventFormComponent } from './dashboard/calendar/event-form/event-form.c
     DirectivesModule,
     PipesModule
   ],
-  declarations: [DashboardComponent, SettingComponent, SideReportComponent, CalendarComponent, EventFormComponent]
+  declarations: [DashboardComponent, SettingComponent, SideReportComponent, CalendarComponent, EventFormComponent],
+  entryComponents: [EventFormComponent]
 })
 export class UsersModule { }
