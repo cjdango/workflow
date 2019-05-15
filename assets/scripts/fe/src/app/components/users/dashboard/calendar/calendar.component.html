@@ -1,5 +1,13 @@
-<ng-template #eventForm let-eventDate="date" let-popover="popover">
-  <app-event-form [eventDate]="eventDate" (submitSuccess)="popover.close()"></app-event-form>
+<ng-template #eventList let-eventDate="date" let-popover="popover">
+  <div class="list-group list-group-flush">
+    <a href="" prevdefault class="list-group-item list-group-item-action" *ngFor="let event of eventDate.events">{{event.title}}</a>
+  </div>
+  <button class="btn btn-primary btn-block" (click)="openModalForm(eventDate.date); popover.close();">Create event</button>
+</ng-template>
+
+<ng-template #noEvents let-eventDate="date" let-popover="popover">
+  <p class="lead">No events for this date.</p>
+  <button class="btn btn-primary btn-block" (click)="openModalForm(eventDate.date); popover.close();">Create event</button>
 </ng-template>
 
 <div class="monthly-calendar">
@@ -19,14 +27,14 @@
         #datePopover1="ngbPopover"
         *ngFor="let date of firstWeek" 
         [ngClass]="getDateClass(date.date)"
-        [ngbPopover]="!date.events.length ? eventForm : null"
+        [ngbPopover]="date.events.length ? eventList : noEvents"
         container="body"
         autoClose="outside"
         triggers="manual"
-        popoverTitle="Event"
-        (click)="toggleEventForm(datePopover1, date.date)">
+        popoverTitle="Events"
+        (click)="toggleEventForm(datePopover1, date)">
         {{date.date.getDate()}}
-        {{date.events.length ? 'e': null}}
+        {{date.events.length ? '!': null}}
       </span>
     </div>
     <div class="wholeMonth" id="wholeMonth" aria-lablledby="firstWeek" data-parent="#datesAccordion" [ngbCollapse]="isCollapsed">
@@ -35,14 +43,14 @@
           #datePopover2="ngbPopover"
           *ngFor="let date of week" 
           [ngClass]="getDateClass(date.date)"
-          [ngbPopover]="!date.events.length ? eventForm : null"
+          [ngbPopover]="date.events.length ? eventList : noEvents"
           container="body"
           autoClose="outside"
           triggers="manual"
-          popoverTitle="Event"
-          (click)="toggleEventForm(datePopover2, date.date)">
+          popoverTitle="Events"
+          (click)="toggleEventForm(datePopover2, date)">
           {{date.date.getDate()}}
-          {{date.events.length ? 'e': null}}
+          {{date.events.length ? '!': null}}
         </span>
       </div>
     </div>

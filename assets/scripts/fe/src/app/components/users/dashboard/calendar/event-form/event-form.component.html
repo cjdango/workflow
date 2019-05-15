@@ -1,53 +1,63 @@
-<form [formGroup]="form.form" (ngSubmit)="onSubmit(form.form)" class="form">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="form-group">
-        <label>Title:</label>
-        <input type="text" formControlName="title" class="form-control" />
-        <span [hidden]="form.valid('title')">This field is required.</span>
-      </div>
-    </div>
+<div class="modal-header">
+  <h4 class="modal-title">Create event for {{formattedEventDate}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
 
-    <div class="col-md-12">
-      <div class="form-group">
-        <label>Content:</label>
-        <input type="text" formControlName="content" class="form-control" />
-        <span [hidden]="form.valid('content')">This field is required.</span>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="form-group">
-        <label>Participants:</label>
-          <select formControlName="participants_id" class="form-control" multiple>
-            <option *ngFor="let user of users" [ngValue]="user.id">{{user.full_name}}</option>
-          </select>
-        <span [hidden]="form.valid('participants_id')">
-          This field is required.
-        </span>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="form-group">
-        <label>Start time:</label>
-        <input type="time" formControlName="start_time" class="form-control" />
-        <span [hidden]="form.valid('start_time')">This field is required.</span>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="form-group">
-        <label>End time:</label>
-        <input type="time" formControlName="end_time" class="form-control" />
-        <span [hidden]="form.valid('end_time')">This field is required.</span>
-      </div>
-    </div>
-    <div class="col-md-12">
+<!-- MODAL BODY -->
+<div class="modal-body">
+  <form [formGroup]="form.form" (ngSubmit)="onSubmit(form.form)" class="form p-3">
+    <div class="row">
+      <div class="col-md-12">
         <div class="form-group">
-          <label>Frequency:</label>
-          <input type="text" formControlName="frequency" class="form-control" />
-          <span [hidden]="form.valid('frequency')">This field is required.</span>
+          <label>Title:</label>
+          <input type="text" formControlName="title" class="form-control" />
+          <span [hidden]="form.valid('title')">This field is required.</span>
+        </div>
+      </div>  
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Content:</label>
+          <input type="text" formControlName="content" class="form-control" />
+          <span [hidden]="form.valid('content')">This field is required.</span>
         </div>
       </div>
-  </div>
-
-  <button type="submit" class="btn btn-primary px-4">Add Event</button>
-</form>
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Participants:</label>
+            <select formControlName="participants_id" class="form-control" multiple>
+              <option *ngFor="let user of users" [ngValue]="user.id">{{user.full_name}}</option>
+            </select>
+          <span [hidden]="form.valid('participants_id')">
+            This field is required.
+          </span>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Start time:</label>
+          <input type="time" formControlName="start_time" class="form-control" />
+          <span [hidden]="form.valid('start_time')">This field is required.</span>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>End time:</label>
+          <input type="time" formControlName="end_time" class="form-control" />
+          <span [hidden]="form.valid('end_time')">This field is required.</span>
+        </div>
+      </div>
+      <div class="col-md-12">
+          <div class="form-group">
+            <label>Frequency:</label>
+            <input type="text" formControlName="frequency" class="form-control" />
+            <span [hidden]="form.valid('frequency')">This field is required.</span>
+          </div>
+        </div>
+    </div>
+  
+    <button type="submit" class="btn btn-primary px-4">Add Event</button>
+  </form>
+</div>
+<!-- END MODAL BODY -->

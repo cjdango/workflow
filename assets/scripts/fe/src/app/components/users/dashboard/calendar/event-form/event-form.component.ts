@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
 import * as moment from 'moment';
 
 import { EventForm } from 'src/app/commons/forms/feed.forms';
@@ -15,22 +17,28 @@ import { UsersService } from 'src/app/commons/services/users/users.service';
 })
 export class EventFormComponent implements OnInit {
   @Input() eventDate : Date;
-  @Output() submitSuccess   : EventEmitter<any> = new EventEmitter();
 
   users        : Array<User>;
   private form : EventForm;
 
   constructor(
     private feed         : FeedService,
-    private usersService : UsersService
+    private usersService : UsersService,
+    public activeModal: NgbActiveModal
   ) {
     this.users = usersService.allUsers;
   }
 
   ngOnInit() {
-    const event_date = moment(this.eventDate).format('YYYY-MM-DD');
     this.form = new EventForm(new Event);
-    this.form.defaultValue({ event_date });
+    this.form.defaultValue({ event_date: this.formattedEventDate });
+  }
+
+  /**
+   * Format event date as YYYY-MM-DD
+   */
+  get formattedEventDate() {
+    return moment(this.eventDate).format('YYYY-MM-DD');
   }
 
   onSubmit({ value, valid }: { value: Event, valid: boolean }) {
@@ -40,8 +48,8 @@ export class EventFormComponent implements OnInit {
     // format are valid.
     if (valid) {
       this.feed.addEvent(value).then((data) => {
-        console.log(data);
-        this.submitSuccess.emit(data);
+        // Pass data into the active modal as result
+        this.activeModal.close(data);
       });
     }
   }

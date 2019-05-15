@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { ServerService } from 'src/app/commons/services/auth/server.service';
 import { FeedService } from 'src/app/commons/services/utils/feed.service';
+import { EventFormComponent } from './event-form/event-form.component';
 
 
 @Component({
@@ -24,7 +27,8 @@ export class CalendarComponent implements OnInit {
 
   constructor(
     private server: ServerService,
-    private feed  : FeedService
+    private feed  : FeedService,
+    private modal : NgbModal
   ) {
     this.isCollapsed = true;
     this._now         = this.server.now;
@@ -175,6 +179,24 @@ export class CalendarComponent implements OnInit {
     } else {
       popover.open({ date, popover });
     }
+  }
+
+  openModalForm(eventDate: Date) {
+    const modalRef = this.modal.open(EventFormComponent);
+
+    // pass `eventDate` into `EventFormComponent`
+    modalRef.componentInstance.eventDate = eventDate;
+
+    // Push the added event into `_calendarEvents`
+    modalRef.result
+      .then(event => {
+        this._calendarEvents.push(event);
+      })
+      // Have to catch dismiss reason to avoid uncaught promise.
+      .catch(reason => {
+        // log modal dismiss reason e.g. ( "backdrop click", "cross click")
+        console.log('Dismiss reason:', reason);
+      });
   }
 
 }
