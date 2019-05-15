@@ -153,7 +153,7 @@ export class CalendarComponent implements OnInit {
   }
 
   /**
-   * Get events that belongs to the given `date`.
+   * Get events that belongs or triggered to the given `date`.
    * @param date `Date` instance.
    */
   private _getDateEvents(date: Date) {

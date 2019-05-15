@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.conf import settings
 from django.utils import timezone
 from rest_framework import serializers
@@ -32,6 +33,7 @@ class EventSerializer(serializers.ModelSerializer):
         queryset=User.objects.all(), source='participants',
         write_only=True, many=True, required=False
     )
+    frequency = serializers.CharField(required=False, allow_blank=True)
 
 
     class Meta:
@@ -44,6 +46,7 @@ class EventSerializer(serializers.ModelSerializer):
             'participants',
             'participants_id',
             'frequency',
+            'freq_week_idx',
             'event_date',
             'start_time',
             'end_time',
@@ -51,28 +54,35 @@ class EventSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
+        frequency = validated_data.pop('frequency')
         event = super(EventSerializer, self).create(validated_data)
-        
+
         # Add event organizer as always participant.
         event.participants.add(event.organizer)
+        if frequency:
+            event.frequency = frequency
 
         return event
 
     def update(self, instance, validated_data):
+        frequency = self.initial_data.get('frequency')
         event = super(EventSerializer, self).update(instance, validated_data)
 
         # Add event organizer as always participant.
         event.participants.add(event.organizer)
+        if frequency:
+            event.frequency = frequency
 
         return event
-    
+
     def to_representation(self, instance):
         ret = super(EventSerializer, self).to_representation(instance)
 
-        # We need to allow read-write for start_time and end_time.
-        # `SerializerMethodField` is not an option so we format these
-        # fields here.
+        
         ret.update({
+            # We need to allow read-write for start_time and end_time.
+            # `SerializerMethodField` is not an option so we format these
+            # fields here.
             'start_time': f"{instance.event_date}T{instance.start_time}",
             'end_time': f"{instance.event_date}T{instance.end_time}",
         })
