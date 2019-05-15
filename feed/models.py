@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
+
 
 from users.models import User
 
@@ -17,30 +19,17 @@ class EventManager(models.Manager):
     def triggered_today(self):
         """Returns all events that are or will be triggered today.
         """
-        past_events = super().get_queryset().filter(
-            event_date__lte=timezone.now(),
-        )
+        now = timezone.now()
 
-        day_today = timezone.now().day
-        month_today = timezone.now().month
+        daily_q = Q(freq_day="*", freq_mo="*", freq_week_idx="*")
+        weekly_q = Q(freq_day="*", freq_mo="*", freq_week_idx=now.weekday() + 1)
+        monthly_q = Q(freq_day=now.day, freq_mo="*", freq_week_idx="*")
+        yearly_q = Q(freq_day=now.day, freq_mo=now.month, freq_week_idx="*")
+        query = (daily_q | weekly_q | monthly_q | yearly_q)
 
-        # Have to add 2 since django's week_day lookup for DateField
-        # Starts with 1 as Sunday and 7 as Saturday but python's 
-        # datetime.datetime.weekday() starts with 0 as Monday and 6 as Sunday
-        week_day_today = timezone.now().weekday() + 2
+        events_today = super().get_queryset().filter(query)
 
-        onetime_events = past_events.filter(frequency=None, event_date__day=day_today)
-        daily_events = past_events.filter(frequency='x x * * *')
-        weekly_events = past_events.filter(frequency='x x * * x', event_date__week_day=week_day_today)
-        monthly_events = past_events.filter(frequency='x x x * *', event_date__day=day_today)
-        yearly_events = past_events.filter(
-            frequency='x x x x *',
-            event_date__day=day_today,
-            event_date__month=month_today
-        )
-
-        # Combine querysets
-        return onetime_events | daily_events | weekly_events | monthly_events | yearly_events
+        return events_today
 
 
 class Event(models.Model):
@@ -56,7 +45,12 @@ class Event(models.Model):
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
 
-    frequency = models.CharField(max_length=50, null=True, blank=True)
+    # Frequency fields (cron schedule expressions separated into fields)
+    freq_min = models.CharField(max_length=20, null=True, blank=True)
+    freq_hr = models.CharField(max_length=20, null=True, blank=True)
+    freq_day = models.CharField(max_length=20, null=True, blank=True)
+    freq_mo = models.CharField(max_length=20, null=True, blank=True)
+    freq_week_idx = models.CharField(max_length=20, null=True, blank=True)
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateField(auto_now=True)
@@ -65,3 +59,20 @@ class Event(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+
+    @property
+    def frequency(self):
+        return f'{self.freq_min} {self.freq_hr} {self.freq_day} {self.freq_mo} {self.freq_week_idx}'.strip()
+    
+    @frequency.setter
+    def frequency(self, frequency):
+        freq_list = frequency.split()
+        freq_parts = ['freq_min', 'freq_hr', 'freq_day', 'freq_mo', 'freq_week_idx']
+
+        if len(freq_list):            
+            freq_exp = { x : freq_list[idx] for idx, x in enumerate(freq_parts) }
+            for key, value in freq_exp.items():
+                setattr(self, key, value)
+        else:
+            for key in freq_parts:
+                setattr(self, key, '')
