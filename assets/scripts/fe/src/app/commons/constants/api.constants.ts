@@ -43,6 +43,7 @@ export const FEED_NOTIFICATIONS_PENDING = urlsafe(FEED_NOTIFICATIONS, 'pending')
 
 export const FEED_CALENDAR = urlsafe(FEED, 'calendar');
 export const FEED_CALENDAR_EVENTS = urlsafe(FEED_CALENDAR, 'events');
+export const FEED_CALENDAR_EVENT = (id: any) => urlsafe(FEED_CALENDAR_EVENTS, id);
 
 /* HISTORY ENDPOINTS
  */

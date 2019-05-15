@@ -1,13 +1,16 @@
-<ng-template #eventList let-eventDate="date" let-popover="popover">
+<ng-template #eventList let-calendarDate="calendarDate" let-popover="popover">
   <div class="list-group list-group-flush">
-    <a href="" prevdefault class="list-group-item list-group-item-action" *ngFor="let event of eventDate.events">{{event.title}}</a>
+    <a href="" prevdefault 
+      class="list-group-item list-group-item-action" 
+      *ngFor="let event of calendarDate.events"
+      (click)="openModalForm({ eventInstance: event, eventDate: calendarDate.date }); popover.close();">{{event.title}}</a>
   </div>
-  <button class="btn btn-primary btn-block" (click)="openModalForm(eventDate.date); popover.close();">Create event</button>
+  <button class="btn btn-primary btn-block" (click)="openModalForm({ eventDate: calendarDate.date }); popover.close();">Create event</button>
 </ng-template>
 
-<ng-template #noEvents let-eventDate="date" let-popover="popover">
+<ng-template #noEvents let-calendarDate="calendarDate" let-popover="popover">
   <p class="lead">No events for this date.</p>
-  <button class="btn btn-primary btn-block" (click)="openModalForm(eventDate.date); popover.close();">Create event</button>
+  <button class="btn btn-primary btn-block" (click)="openModalForm({ eventDate: calendarDate.date }); popover.close();">Create event</button>
 </ng-template>
 
 <div class="monthly-calendar">
@@ -25,32 +28,32 @@
     <div class="weekview" id="firstWeek">
       <span 
         #datePopover1="ngbPopover"
-        *ngFor="let date of firstWeek" 
-        [ngClass]="getDateClass(date.date)"
-        [ngbPopover]="date.events.length ? eventList : noEvents"
+        *ngFor="let calendarDate of firstWeek" 
+        [ngClass]="getDateClass(calendarDate.date)"
+        [ngbPopover]="calendarDate.events.length ? eventList : noEvents"
         container="body"
         autoClose="outside"
         triggers="manual"
         popoverTitle="Events"
-        (click)="toggleEventForm(datePopover1, date)">
-        {{date.date.getDate()}}
-        {{date.events.length ? '!': null}}
+        (click)="toggleEventForm(datePopover1, calendarDate)">
+        {{calendarDate.date.getDate()}}
+        {{calendarDate.events.length ? '!': null}}
       </span>
     </div>
     <div class="wholeMonth" id="wholeMonth" aria-lablledby="firstWeek" data-parent="#datesAccordion" [ngbCollapse]="isCollapsed">
       <div class="weekview" *ngFor="let week of weeks.slice(1)">
         <span 
           #datePopover2="ngbPopover"
-          *ngFor="let date of week" 
-          [ngClass]="getDateClass(date.date)"
-          [ngbPopover]="date.events.length ? eventList : noEvents"
+          *ngFor="let calendarDate of week" 
+          [ngClass]="getDateClass(calendarDate.date)"
+          [ngbPopover]="calendarDate.events.length ? eventList : noEvents"
           container="body"
           autoClose="outside"
           triggers="manual"
           popoverTitle="Events"
-          (click)="toggleEventForm(datePopover2, date)">
-          {{date.date.getDate()}}
-          {{date.events.length ? '!': null}}
+          (click)="toggleEventForm(datePopover2, calendarDate)">
+          {{calendarDate.date.getDate()}}
+          {{calendarDate.events.length ? '!': null}}
         </span>
       </div>
     </div>

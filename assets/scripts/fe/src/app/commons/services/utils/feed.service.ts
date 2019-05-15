@@ -6,7 +6,13 @@ import { HttpClient } from '@angular/common/http';
 import { queryparams } from '../../utils/http.utils';
 
 import { Feed } from '../../models/feed.models';
-import { FEED, FEED_NOTIFICATIONS_EVENTS, FEED_NOTIFICATIONS_PENDING, FEED_CALENDAR_EVENTS } from '../../constants/api.constants';
+import {
+  FEED,
+  FEED_NOTIFICATIONS_EVENTS,
+  FEED_NOTIFICATIONS_PENDING,
+  FEED_CALENDAR_EVENTS,
+  FEED_CALENDAR_EVENT
+} from '../../constants/api.constants';
 import { ServerService } from '../auth/server.service';
 
 
@@ -19,12 +25,12 @@ export class FeedService {
   public pendingIssues: any;
 
   public scrollHeight:number;
-  
+
   // toggle checker that is used to check if there is
   // a pending request to the backend. This prevents
   // the system from sending spam requests to the backend.
   public fetching = false;
-  
+
   // toggle checker that is used to check if the feed list
   // should be reloaded or not. there are pages/components
   // which the list shouldn't be reloaded. (dashboard-report,
@@ -116,6 +122,16 @@ export class FeedService {
 
   addEvent(value) {
     return this.http.post(FEED_CALENDAR_EVENTS, value)
+      .toPromise();
+  }
+
+  updateEvent(value, eventID) {
+    return this.http.put(FEED_CALENDAR_EVENT(eventID), value)
+      .toPromise();
+  }
+
+  deleteEvent(value, eventID) {
+    return this.http.delete(FEED_CALENDAR_EVENT(eventID), value)
       .toPromise();
   }
 }
