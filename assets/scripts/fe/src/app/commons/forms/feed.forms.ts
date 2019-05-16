@@ -15,7 +15,7 @@ export class EventForm {
       event_date        : new FormControl(data.event_date, [Validators.required]),
       start_time        : new FormControl(data.start_time, [Validators.required]),
       end_time          : new FormControl(data.end_time, [Validators.required]),
-      frequency         : new FormControl(data.frequency, [Validators.required]),
+      frequency         : new FormControl(data.frequency),
     });
   }
 
