@@ -44,7 +44,7 @@ export class EventFormComponent implements OnInit {
 
       this.form.defaultValue({...this.eventInstance, start_time, end_time, participants_id});
     } else {
-      this.form.defaultValue({ event_date: this.formattedEventDate });
+      this.form.defaultValue({ event_date: this.formattedEventDate, frequency: '' });
     }
   }
 
@@ -55,12 +55,50 @@ export class EventFormComponent implements OnInit {
     return moment(this.eventDate).format('YYYY-MM-DD');
   }
 
-  onSubmit({ value, valid }: { value: Event, valid: boolean }, action: 'create' | 'update' | 'delete') {
+  /**
+   * Generates array of `{ value: string, text: string }`
+   * Used for frequency options on template
+   */
+  getFreqOpts() {
+    const controls    = this.form.form.controls;
+    const startTimeFC = controls['start_time'];
+    const eventDateFC = controls['event_date'];
+
+    const date        = moment(
+      `${eventDateFC.value} ${startTimeFC.value}`
+      , 'YYYY-MM-DD hh:mm:ss')
+      .toDate();
+
+    const freqMin     = date.getMinutes();
+    const freqHr      = date.getHours();
+    const freqDay     = date.getDate();
+    const freqMonth   = date.getMonth() + 1;
+    const freqWeekIdx = date.getDay();
+
+    const daily   = `${freqMin} ${freqHr} * * *`;
+    const weekly  = `${freqMin} ${freqHr} * * ${freqWeekIdx}`;
+    const monthly = `${freqMin} ${freqHr} ${freqDay} * *`;
+    const yearly  = `${freqMin} ${freqHr} ${freqDay} ${freqMonth} *`;
+    const none    = '';
+
+    return [
+      { value: none, text: 'None' },
+      { value: daily, text: 'Daily' },
+      { value: weekly, text: 'Weekly' },
+      { value: monthly, text: 'Monthly' },
+      { value: yearly, text: 'Yearly' }
+    ];
+  }
+
+  onSubmit(action: 'create' | 'update' | 'delete') {
     // initiate submission of form.
     this.form.submitted = true;
     // send the form data to the backend if the value
     // format are valid.
+    const valid = this.form.form.valid;
     if (valid) {
+      // this.form.setFrequencyVal();
+      const value = this.form.form.value;
       // Submit request base on action
       switch (action) {
         case 'create':
