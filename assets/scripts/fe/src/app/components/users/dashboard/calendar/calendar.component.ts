@@ -158,7 +158,21 @@ export class CalendarComponent implements OnInit {
    */
   private _getDateEvents(date: Date) {
     return this._calendarEvents
-      .filter(e => e.event_date === moment(date).format('YYYY-MM-DD'));
+      .filter(e => {
+        const { freq_day, freq_mo, freq_week_idx, event_date } = e;
+        const day     = String(date.getDate());
+        const mo      = String(date.getMonth() + 1);
+        const weekIdx = String(date.getDay());
+        const anyVal = '*';
+
+        const once    = event_date === moment(date).format('YYYY-MM-DD');
+        const daily   = freq_day === anyVal && freq_mo === anyVal && freq_week_idx === anyVal;
+        const weekly  = freq_day === anyVal && freq_mo === anyVal && freq_week_idx === weekIdx;
+        const monthly = freq_day === day && freq_mo === anyVal && freq_week_idx === anyVal;
+        const yearly  = freq_day === day && freq_mo === mo && freq_week_idx === anyVal;
+
+        return (once || daily || weekly || monthly || yearly);
+      });
   }
 
   /**
