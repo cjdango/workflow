@@ -46,15 +46,20 @@ class EventSerializer(serializers.ModelSerializer):
             'participants',
             'participants_id',
             'frequency',
+            'freq_min',
+            'freq_hr',
+            'freq_day',
+            'freq_mo',
             'freq_week_idx',
             'event_date',
             'start_time',
             'end_time',
             'date_created',
         )
+        read_only_fields = ('freq_min', 'freq_hr', 'freq_day', 'freq_mo', 'freq_week_idx',)
 
     def create(self, validated_data):
-        frequency = validated_data.pop('frequency')
+        frequency = self.initial_data.get('frequency')
         event = super(EventSerializer, self).create(validated_data)
 
         # Add event organizer as always participant.
